@@ -89,6 +89,14 @@ function save() {
 
   renderList(elements.search.value)
   persist()
+
+  // Limpar os inputs após salvar e desmarcar seleção
+  elements.promptTitle.textContent = ""
+  elements.promptContent.textContent = ""
+  state.selectedId = null
+  updateAllEditableStates()
+  elements.promptTitle.focus()
+
   alert("Prompt salvo com sucesso!")
 }
 
