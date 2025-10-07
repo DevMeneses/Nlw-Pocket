@@ -10,6 +10,9 @@ Você vai dominar os fundamentos da programação, utilizando as tecnologias mai
 
 Uma central de prompts de IA prática e intuitiva, feita para te ajudar a organizar todo o seu fluxo de trabalho. Com ele, você pode cadastrar, editar e buscar rapidamente os prompts de Inteligência Artificial que mais utiliza no seu dia a dia, usando HTML, CSS, JavaScript e Inteligência Artificial, garantindo que você saia com um projeto real e funcional para o seu portfólio.
 
+<img width="1866" height="903" alt="image" src="https://github.com/user-attachments/assets/75a90dee-15ea-4d3b-95d0-1ed2ad281df0" />
+
+
 ## Tecnologias utilizadas
 
 - HTML5
