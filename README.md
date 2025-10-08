@@ -4,6 +4,9 @@ Um projeto simples e prático criado durante o NLW Pocket. É uma pequena aplica
 
 Usei apenas HTML, CSS e JavaScript puro para manter tudo leve e fácil de entender.
 
+<img width="1862" height="904" alt="image" src="https://github.com/user-attachments/assets/468f8068-d5f9-40f8-be7e-08743076974d" />
+
+
 ## O que este projeto faz
 
 - Cadastre, edite e procure prompts rapidamente.
