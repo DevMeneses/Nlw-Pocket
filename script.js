@@ -21,6 +21,10 @@ const elements = {
   search: document.getElementById("search-input"),
   btnNew: document.getElementById("btn-new"),
   btnCopy: document.getElementById("btn-copy"),
+  toastContainer: document.getElementById("toast-container"),
+  confirmModal: document.getElementById("confirm-modal"),
+  confirmYes: document.getElementById("confirm-yes"),
+  confirmNo: document.getElementById("confirm-no"),
 }
 
 // Atualiza o estado do wrapper conforme o conteúdo do elemento
@@ -63,7 +67,7 @@ function save() {
   const hasContent = elements.promptContent.textContent.trim()
 
   if (!title || !hasContent) {
-    alert("Título e conteúdo não podem estar vazios.")
+    showToast("Título e conteúdo não podem estar vazios.", "error")
     return
   }
 
@@ -96,15 +100,17 @@ function save() {
   state.selectedId = null
   updateAllEditableStates()
   elements.promptTitle.focus()
-
-  alert("Prompt salvo com sucesso!")
+  showToast("Prompt salvo com sucesso!", "success")
 }
 
 function persist() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state.prompts))
+    // Persist selectedId as well
+    localStorage.setItem(`${STORAGE_KEY}_selected`, state.selectedId)
   } catch (error) {
     console.log("Erro ao salvar no localStorage:", error)
+    showToast("Erro ao salvar no localStorage", "error")
   }
 }
 
@@ -112,7 +118,9 @@ function load() {
   try {
     const storage = localStorage.getItem(STORAGE_KEY)
     state.prompts = storage ? JSON.parse(storage) : []
-    state.selectedId = null
+    // Restore selectedId if present
+    const sel = localStorage.getItem(`${STORAGE_KEY}_selected`)
+    state.selectedId = sel || null
   } catch (error) {
     console.log("Erro ao carregar do localStorage:", error)
   }
@@ -154,20 +162,160 @@ function newPrompt() {
   elements.promptTitle.focus()
 }
 
+// Toast helper
+function showToast(message, type = "success", ms = 3000) {
+  try {
+    if (!elements.toastContainer) return
+
+    const t = document.createElement("div")
+    t.className = `toast ${type}`
+    t.textContent = message
+
+    elements.toastContainer.appendChild(t)
+
+    // Force reflow for transition
+    void t.offsetWidth
+    t.classList.add("show")
+
+    setTimeout(() => {
+      t.classList.remove("show")
+      setTimeout(() => t.remove(), 250)
+    }, ms)
+  } catch (error) {
+    console.log("Erro ao mostrar toast:", error)
+  }
+}
+
+// Show toast with undo button and callback
+function showUndoToast(message, undoCallback, ms = 5000) {
+  if (!elements.toastContainer) return
+
+  const t = document.createElement("div")
+  t.className = "toast success"
+
+  const txt = document.createElement("span")
+  txt.textContent = message
+  t.appendChild(txt)
+
+  const btn = document.createElement("button")
+  btn.className = "undo"
+  btn.textContent = "Desfazer"
+  t.appendChild(btn)
+
+  elements.toastContainer.appendChild(t)
+  void t.offsetWidth
+  t.classList.add("show")
+
+  const timeout = setTimeout(() => {
+    t.classList.remove("show")
+    setTimeout(() => t.remove(), 250)
+  }, ms)
+
+  btn.addEventListener("click", function () {
+    clearTimeout(timeout)
+    t.classList.remove("show")
+    setTimeout(() => t.remove(), 250)
+    try {
+      undoCallback()
+      showToast("Remoção desfeita.", "success")
+    } catch (e) {
+      showToast("Não foi possível desfazer.", "error")
+    }
+  })
+}
+
+// Modal helpers
+function openConfirmModal(message, onConfirm) {
+  if (!elements.confirmModal) {
+    // fallback to native confirm
+    const ok = confirm(message)
+    if (ok && onConfirm) onConfirm()
+    return
+  }
+
+  const titleEl = elements.confirmModal.querySelector("#confirm-message")
+  if (titleEl) titleEl.textContent = message
+
+  elements.confirmModal.setAttribute("aria-hidden", "false")
+
+  function cleanup() {
+    elements.confirmModal.setAttribute("aria-hidden", "true")
+    elements.confirmYes.removeEventListener("click", onYes)
+    elements.confirmNo.removeEventListener("click", onNo)
+  }
+
+  function onYes() {
+    cleanup()
+    if (onConfirm) onConfirm()
+  }
+
+  function onNo() {
+    cleanup()
+  }
+
+  elements.confirmYes.addEventListener("click", onYes)
+  elements.confirmNo.addEventListener("click", onNo)
+}
+
 function copySelected() {
   try {
-    const content = elements.promptContent
+    const contentEl = elements.promptContent
+    const text = contentEl ? contentEl.innerText.trim() : ""
 
-    if (!navigator.clipboard) {
-      console.error("Clipboard API não suportada neste ambiente.")
+    if (!text) {
+      showToast("Nada para copiar.", "error")
       return
     }
 
-    navigator.clipboard.writeText(content.innerText)
+    // Use Clipboard API when disponível
+    if (
+      navigator.clipboard &&
+      typeof navigator.clipboard.writeText === "function"
+    ) {
+      navigator.clipboard
+        .writeText(text)
+        .then(() =>
+          showToast("Conteúdo copiado para a área de transferência!", "success")
+        )
+        .catch((err) => {
+          console.error("Falha ao usar Clipboard API:", err)
+          // fallback
+          fallbackCopy(text)
+        })
+      return
+    }
 
-    alert("Conteúdo copiado para a área de transferência!")
+    // Fallback para ambientes sem Clipboard API (execCommand)
+    fallbackCopy(text)
   } catch (error) {
     console.log("Erro ao copiar para a área de transferência:", error)
+  }
+}
+
+function fallbackCopy(text) {
+  try {
+    const textarea = document.createElement("textarea")
+    textarea.value = text
+    // Prevent scrolling to bottom
+    textarea.style.position = "fixed"
+    textarea.style.top = "0"
+    textarea.style.left = "0"
+    textarea.style.opacity = "0"
+    document.body.appendChild(textarea)
+    textarea.focus()
+    textarea.select()
+
+    const successful = document.execCommand("copy")
+    document.body.removeChild(textarea)
+
+    if (successful) {
+      showToast("Conteúdo copiado para a área de transferência!", "success")
+    } else {
+      showToast("Não foi possível copiar. Copie manualmente.", "error")
+    }
+  } catch (err) {
+    console.error("Fallback de cópia falhou:", err)
+    showToast("Não foi possível copiar para a área de transferência.", "error")
   }
 }
 
@@ -187,15 +335,44 @@ elements.list.addEventListener("click", function (event) {
   if (!item) return
 
   const id = item.getAttribute("data-id")
-  state.selectedId = id
 
   if (removeBtn) {
-    // Remover prompt.
-    state.prompts = state.prompts.filter((p) => p.id !== id)
-    renderList(elements.search.value)
-    persist()
+    // Usar modal custom para confirmação
+    const promptToRemove = state.prompts.find((p) => p.id === id)
+    if (!promptToRemove) return
+
+    openConfirmModal(
+      "Tem certeza que deseja remover este prompt?",
+      function () {
+        // Remove and keep a backup for undo
+        const backup = { ...promptToRemove }
+        state.prompts = state.prompts.filter((p) => p.id !== id)
+
+        // If removed item was selected, clear editor
+        if (state.selectedId === id) {
+          state.selectedId = null
+          elements.promptTitle.textContent = ""
+          elements.promptContent.textContent = ""
+          updateAllEditableStates()
+        }
+
+        renderList(elements.search.value)
+        persist()
+
+        // Show undo toast
+        showUndoToast("Prompt removido.", function () {
+          // Restore backup to the start of the list
+          state.prompts.unshift(backup)
+          persist()
+          renderList(elements.search.value)
+        })
+      }
+    )
+
     return
   }
+
+  state.selectedId = id
 
   if (event.target.closest("[data-action='select']")) {
     const prompt = state.prompts.find((p) => p.id === id)
@@ -222,6 +399,19 @@ function init() {
   // Eventos para abrir/fechar sidebar
   elements.btnOpen.addEventListener("click", openSidebar)
   elements.btnCollapse.addEventListener("click", closeSidebar)
+
+  // If there's a selectedId after load, try to restore selection
+  if (state.selectedId) {
+    const prompt = state.prompts.find((p) => p.id === state.selectedId)
+    if (prompt) {
+      elements.promptTitle.textContent = prompt.title
+      elements.promptContent.innerHTML = prompt.content
+      updateAllEditableStates()
+    } else {
+      state.selectedId = null
+      localStorage.removeItem(`${STORAGE_KEY}_selected`)
+    }
+  }
 }
 
 // Executa a inicialização ao carregar o script

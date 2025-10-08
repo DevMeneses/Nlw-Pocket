@@ -87,13 +87,42 @@
 
         <div>
           <span class="version">Versão 1.0.0</span>
-          <span class="version">Desenvolvido por Matheus Meneses Messias</span>
+          <span class="version"
+            >Desenvolvido por
+            <a
+              href="https://www.linkedin.com/in/matheusm-meneses/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Matheus Meneses Messias</a
+            ></span
+          >
           <span class="version"
             >Projeto criado durante o evento da Rocketseat</span
           >
         </div>
       </main>
     </div>
+    <!-- Toast container (notifications) -->
+    <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Confirm modal (hidden by default) -->
+    <div id="confirm-modal" class="modal" aria-hidden="true">
+      <div class="modal-backdrop"></div>
+      <div
+        class="modal-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirm-title"
+      >
+        <h3 id="confirm-title">Confirmar remoção</h3>
+        <p id="confirm-message">Tem certeza que deseja remover este prompt?</p>
+        <div class="modal-actions">
+          <button id="confirm-no" class="btn btn-outline">Cancelar</button>
+          <button id="confirm-yes" class="btn btn-primary">Remover</button>
+        </div>
+      </div>
+    </div>
+
     <script src="script.js"></script>
   </body>
 </html>
