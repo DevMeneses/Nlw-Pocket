@@ -334,6 +334,98 @@ body {
   }
 }
 
+/* Tweak sizes for small screens (phones) */
+@media (max-width: 600px) {
+  .main {
+    padding: 18px 16px;
+    gap: 18px;
+  }
+
+  .main-header {
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  /* Buttons: smaller height, less padding and smaller text */
+  .btn {
+    height: 36px;
+    gap: 8px;
+    font-size: 13px;
+    border-radius: 6px;
+  }
+
+  .btn-outline {
+    padding: 0 10px;
+  }
+
+  .btn-primary {
+    padding: 0 12px;
+  }
+
+  .w-150 {
+    width: 120px;
+  }
+
+  /* Icon sizing */
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .btn-icon {
+    height: 28px;
+    width: 28px;
+  }
+
+  /* Search input slightly smaller */
+  .search-input {
+    height: 40px;
+    font-size: 14px;
+    padding-left: 44px;
+  }
+
+  /* Reduce visible text sizes in editor */
+  .prompt-title {
+    font-size: 24px;
+  }
+
+  /* Give extra spacing between header and title on small screens */
+  #title-wrapper {
+    margin-top: 8px;
+  }
+
+  .prompt-content {
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  /* Make the open toggle less intrusive */
+  .open-toggle {
+    top: 18px;
+    left: 12px;
+  }
+
+  .logo {
+    height: 20px;
+  }
+
+  /* Slightly smaller toasts on mobile */
+  #toast-container {
+    right: 12px;
+    left: 12px;
+    bottom: 12px;
+    align-items: center;
+  }
+
+  .toast {
+    width: 100%;
+    max-width: 520px;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
 /* Version / attribution styling */
 .version {
   display: block;
