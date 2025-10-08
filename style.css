@@ -334,7 +334,7 @@ body {
   }
 }
 
-/* Tweak sizes for small screens (phones) */
+/* Ajustes de tamanhos para telas pequenas (celulares) */
 @media (max-width: 600px) {
   .main {
     padding: 18px 16px;
@@ -384,12 +384,12 @@ body {
     padding-left: 44px;
   }
 
-  /* Reduce visible text sizes in editor */
+  /* Reduzir tamanhos de texto no editor */
   .prompt-title {
     font-size: 24px;
   }
 
-  /* Give extra spacing between header and title on small screens */
+  /* Espaçamento extra entre o header e o título em telas pequenas */
   #title-wrapper {
     margin-top: 30px;
   }
@@ -409,7 +409,7 @@ body {
     height: 20px;
   }
 
-  /* Slightly smaller toasts on mobile */
+  /* Toasts ligeiramente menores no mobile */
   #toast-container {
     right: 12px;
     left: 12px;
@@ -545,4 +545,25 @@ body {
 .version a:hover {
   text-decoration: underline;
   opacity: 0.95;
+}
+
+/* Fallback mobile class styles: applied when JS detects small viewport
+   This helps if media queries are not applied due to caching or environment. */
+body.is-mobile .main-header {
+  margin-bottom: 12px !important;
+}
+
+body.is-mobile #title-wrapper {
+  margin-top: 12px !important;
+}
+
+body.is-mobile .btn {
+  height: 36px !important;
+  gap: 8px !important;
+  font-size: 13px !important;
+}
+
+body.is-mobile .icon {
+  width: 16px !important;
+  height: 16px !important;
 }

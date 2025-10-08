@@ -162,7 +162,7 @@ function newPrompt() {
   elements.promptTitle.focus()
 }
 
-// Toast helper
+// Helper de notificações (toast)
 function showToast(message, type = "success", ms = 3000) {
   try {
     if (!elements.toastContainer) return
@@ -186,7 +186,7 @@ function showToast(message, type = "success", ms = 3000) {
   }
 }
 
-// Show toast with undo button and callback
+// Mostrar toast com botão "Desfazer" e callback
 function showUndoToast(message, undoCallback, ms = 5000) {
   if (!elements.toastContainer) return
 
@@ -224,7 +224,7 @@ function showUndoToast(message, undoCallback, ms = 5000) {
   })
 }
 
-// Modal helpers
+// Helpers do modal de confirmação
 function openConfirmModal(message, onConfirm) {
   if (!elements.confirmModal) {
     // fallback to native confirm
@@ -413,6 +413,20 @@ function init() {
     }
   }
 }
+
+// Detecção mobile: adiciona a classe body.is-mobile quando a viewport for pequena
+function updateMobileClass() {
+  try {
+    const isMobile = window.innerWidth <= 600
+    if (isMobile) document.body.classList.add("is-mobile")
+    else document.body.classList.remove("is-mobile")
+  } catch (e) {
+    // ignore
+  }
+}
+
+window.addEventListener("resize", updateMobileClass)
+window.addEventListener("load", updateMobileClass)
 
 // Executa a inicialização ao carregar o script
 init()
