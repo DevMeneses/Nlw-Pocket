@@ -1,38 +1,50 @@
-# NLW Pocket - Prompt Manager
+# NLW Pocket — Prompt Manager
 
-No NLW Pocket Iniciantes, você vai colocar a mão na massa e desenvolver seu primeiro projeto de site em apenas 3 aulas. O projeto será o Prompt Manager, uma aplicação web para organizar prompts de IA.
+Um projeto simples e prático criado durante o NLW Pocket. É uma pequena aplicação web para você guardar, editar e organizar seus prompts de IA — ideal para quem quer um gerenciador rápido e sem frescura.
 
-Você vai dominar os fundamentos da programação, utilizando as tecnologias mais requisitadas para a web: **HTML, CSS, JavaScript e Inteligência Artificial**. O grande diferencial é que você vai usar a IA como uma aliada para acelerar o aprendizado e a construção do projeto. Mas não se assuste agora com esses termos! Logo você vai ficar sabendo o que cada um deles significa!
+Usei apenas HTML, CSS e JavaScript puro para manter tudo leve e fácil de entender.
 
-## Sobre o projeto
-
-### Conheça o Prompt Manager
-
-Uma central de prompts de IA prática e intuitiva, feita para te ajudar a organizar todo o seu fluxo de trabalho. Com ele, você pode cadastrar, editar e buscar rapidamente os prompts de Inteligência Artificial que mais utiliza no seu dia a dia, usando HTML, CSS, JavaScript e Inteligência Artificial, garantindo que você saia com um projeto real e funcional para o seu portfólio.
-
+<br>
 <img width="1866" height="903" alt="image" src="https://github.com/user-attachments/assets/75a90dee-15ea-4d3b-95d0-1ed2ad281df0" />
 
+</br>
 
-## Tecnologias utilizadas
+## O que este projeto faz
 
-- HTML5
-- CSS3
-- JavaScript
-- Inteligência Artificial
+- Cadastre, edite e procure prompts rapidamente.
+- Salve seu trabalho no navegador (localStorage).
+- Funcionalidades de usabilidade que torneiam o dia a dia (toasts, confirmação, desfazer).
 
-## Estrutura do projeto
+## Novas funcionalidades (resumido)
 
-- `index.html`: Página principal
-- `style.css`: Estilos do projeto
-- `assets/`: Ícones e imagens
+- Notificações não-bloqueantes (toasts) para feedback de ações.
+- Modal de confirmação customizado antes de remover um prompt.
+- Botão "Desfazer" nas notificações para restaurar uma remoção recente.
+- Persistência da seleção atual (o prompt aberto continua selecionado após recarregar).
+- Função de cópia mais robusta (Clipboard API + fallback).
+- Campos de título e conteúdo são limpos automaticamente após salvar.
+- Link para o LinkedIn do desenvolvedor no rodapé da aplicação.
 
-## Como executar
+## Estrutura
 
-1. Clone o repositório
-2. Abra o arquivo `index.html` em seu navegador
+- `index.html` — interface e marcação
+- `style.css` — estilos
+- `script.js` — lógica e comportamento
+- `assets/` — imagens e ícones
+
+## Como testar localmente
+
+1. Clone o repositório ou baixe os arquivos.
+2. Abra `index.html` no seu navegador (recomendado: Chrome/Edge/Firefox).
+
+Dica: para testar o fallback da cópia, abra o arquivo local (file://) ou use um servidor HTTP simples.
 
 ## Créditos
 
-- Projeto desenvolvido durante o NLW Pocket da Rocketseat
-- Design inspirado no Figma
-- Desenvolvido por Matheus Meneses Messias
+Projeto e melhorias implementadas por Matheus Meneses Messias — https://www.linkedin.com/in/matheusm-meneses/
+
+Desenvolvido durante o NLW Pocket (Rocketseat).
+
+
+
+
