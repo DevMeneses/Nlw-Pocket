@@ -391,7 +391,7 @@ body {
 
   /* Give extra spacing between header and title on small screens */
   #title-wrapper {
-    margin-top: 8px;
+    margin-top: 30px;
   }
 
   .prompt-content {
